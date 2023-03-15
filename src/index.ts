@@ -1,9 +1,16 @@
 #!/usr/bin/env node
-
+import path from 'path'
 import { Command } from 'commander'
 
 import { VERSION } from './constant'
 
+import Cache from './cache'
+import compress from './compression'
+
+// utils
+import { filterFiles } from './utils'
+
+const root = process.cwd()
 const program = new Command()
 
 // 设置程序的基础信息
@@ -19,18 +26,35 @@ program.argument(
 )
 
 // options
+
 // 是否将本次压缩的图片添加至缓存文件里
-program.option(
-  '-caches',
-  'Whether to add the compressed images from this compression to the cache file'
-)
-program.option('-cover', 'Whether to overwrite the source file')
-program.option('-r --recursion', 'Compress all images recursively')
+program
+  .option('--no-caches', 'Do not generate caches file')
+  // 设置缓存文件的路径
+  .option('--caches-path <path>', 'Set caches file path')
+  .option('-p --path <path>', 'Set images path')
+  // 压缩后时候直接覆盖源文件
+  .option('-cover', 'Overwrite the source file')
+  // 递归压缩所有图片文件
+  .option('-r --recursive', 'Compress all images recursively')
 
 program.parse(process.argv)
 
-// const options = program.opts()
+const options = program.opts()
+console.log(options)
+const { recursive } = options
 
-// if (options.list) {
-//   console.log('list')
-// }
+if (options.caches) {
+  const { cachesPath = '/' } = options
+  const cachesFilePath = path.join(root, cachesPath)
+  const cache = new Cache({ outputPath: cachesFilePath })
+  cache.readCachesFile()
+}
+
+if (options.path) {
+  const dirPath = path.join(root, options.path)
+  const imagesPath = filterFiles(dirPath, recursive)
+  imagesPath.forEach((imagePath) => {
+    compress(imagePath)
+  })
+}

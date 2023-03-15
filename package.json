@@ -28,10 +28,11 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
-    "commander": "^10.0.0"
+    "commander": "^10.0.0",
+    "sharp": "^0.31.3"
   },
   "devDependencies": {
-    "@types/node": "^18.15.1",
+    "@types/node": "^18.15.3",
     "eslint": "^8.36.0",
     "eslint-config-relaxed-ts": "^2.0.20",
     "esno": "^0.16.3",
