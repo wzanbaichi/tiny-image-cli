@@ -5,7 +5,7 @@ import { Command } from 'commander'
 import { VERSION } from './constant'
 
 import Cache from './cache'
-import compress from './compression'
+import compress from './sharp'
 
 // utils
 import { filterFiles } from './utils'

@@ -4,7 +4,11 @@ import path from 'path'
 
 // utils
 import { bytesTransform } from './utils'
+
+// maps
 import { imageTypeMap } from './maps'
+
+import { sharpOptions } from './compressOptions'
 
 const root = process.cwd()
 
@@ -19,28 +23,22 @@ export default async (imagePath: string) => {
     const { format } = metadata
     const compressType = imageTypeMap.get(format)
     if (compressType) {
-      image[compressType]({ quality: 75 }).toFile(outputPath, (err, info) => {
-        if (err) {
-          console.log(err)
-        } else {
-          console.log(
-            `oldSize:${bytesTransform(oldSize)} ==>> newSize:${bytesTransform(
-              info.size
-            )}`
-          )
+      image[compressType](sharpOptions[compressType]).toFile(
+        outputPath,
+        (err, info) => {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log(
+              `${imagePath}:oldSize:${bytesTransform(oldSize)} ==>> newSize:${bytesTransform(
+                info.size
+              )}`
+            )
+          }
         }
-      })
+      )
     }
   } catch {}
 
-  // sharp(imagePath)
-  //   .jpeg({ quality: 75 })
-  //   .toFile(outputPath, (err, info) => {
-  //     if (err) {
-  //       console.log(err)
-  //     } else {
-  //       console.log(info)
-  //     }
-  //   })
   // fs.renameSync('path/to/compressed-image.jpg', 'path/to/image.jpg')
 }
