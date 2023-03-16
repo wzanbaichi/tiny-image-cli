@@ -3,27 +3,23 @@ import path from 'path'
 import { Command } from 'commander'
 
 import { VERSION } from './constant'
-
 import Cache from './cache'
-import compress from './sharp'
-
+import sharpCompress from './sharp'
+import { getOptions } from './options'
 // utils
-import { filterFiles } from './utils'
+import { filterFiles, fileReadAndWritePath } from './utils'
+
+// interface
+import { CompressTypeOptions } from './types/index'
 
 const root = process.cwd()
 const program = new Command()
 
 // 设置程序的基础信息
-program
-  .name('tiny-image-cli')
-  .description('A CLI tool for compress images')
-  .version(VERSION)
+program.name('tiny-image-cli').description('A CLI tool for compress images').version(VERSION)
 
 // 接受需要解压的图片path参数
-program.argument(
-  '[string]',
-  'The path of the image that needs to be compressed.'
-)
+program.argument('[string]', 'The path of the image that needs to be compressed.')
 
 // options
 
@@ -46,15 +42,21 @@ const { recursive } = options
 
 if (options.caches) {
   const { cachesPath = '/' } = options
-  const cachesFilePath = path.join(root, cachesPath)
-  const cache = new Cache({ outputPath: cachesFilePath })
+  const cachesFilePath: string = path.join(root, cachesPath)
+  const cache: Cache = new Cache({ outputPath: cachesFilePath })
   cache.readCachesFile()
 }
 
 if (options.path) {
-  const dirPath = path.join(root, options.path)
-  const imagesPath = filterFiles(dirPath, recursive)
-  imagesPath.forEach((imagePath) => {
-    compress(imagePath)
+  const dirPath: string = path.join(root, options.path)
+  const imagesPath: string[] = filterFiles(dirPath, recursive)
+  const sharpOptions: CompressTypeOptions = getOptions()
+  imagesPath.forEach((imagePath: string) => {
+    const imageReadAndWriteOptions = {
+      filePath: imagePath,
+      fromPath: options.path
+    }
+    const pathData = fileReadAndWritePath(imageReadAndWriteOptions)
+    sharpCompress(pathData, sharpOptions)
   })
 }

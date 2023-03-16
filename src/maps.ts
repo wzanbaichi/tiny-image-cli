@@ -5,5 +5,5 @@ export const imageTypeMap = new Map([
   ['avif', 'avif'],
   ['webp', 'webp'],
   ['gif', 'gif'],
-  ['tiff', 'tiff'],
+  ['tiff', 'tiff']
 ])

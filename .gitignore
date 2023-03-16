@@ -30,5 +30,8 @@ dist.zip
 dist*.zip
 node_modules.zip
 docs-cn/docs
+
+#images
 test_images
 images
+tiny-image-compress
