@@ -1,5 +1,5 @@
 {
-  "name": "tiny-image",
+  "name": "tiny-image-cli",
   "type": "module",
   "version": "1.0.0",
   "description": "",
@@ -14,9 +14,8 @@
     "url": "https://github.com/AI-Finance-FE/tiny-image/issues"
   },
   "keywords": [],
-  "main": "index.js",
   "bin": {
-    "tiny": "index.js"
+    "tiny": "dist/index.js"
   },
   "scripts": {
     "dev": "esno src/index.ts",
