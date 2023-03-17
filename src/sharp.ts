@@ -2,7 +2,7 @@ import sharp from 'sharp'
 import * as fs from 'fs'
 import path from 'path'
 
-import { compressSuccessLog } from './log'
+import { compressSuccessLog, errorLog } from './log'
 
 // maps
 import { imageTypeMap } from './maps'
@@ -32,7 +32,7 @@ export default async (
           .withMetadata()
           .toFile(pathData.toPath, (err, info) => {
             if (err) {
-              console.log(err)
+              errorLog(err)
               reject(err)
             } else {
               if (isCover) {

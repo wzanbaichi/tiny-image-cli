@@ -8,7 +8,7 @@ import Cache from './cache'
 import sharpCompress from './sharp'
 import { getOptions } from './options'
 import Count from './count'
-import { startLog, compressDoneLog } from './log'
+import { startLog, compressDoneLog, errorLog } from './log'
 
 // utils
 import { filterFiles, fileReadAndWritePath, asyncForEach, filterImagesPath } from './utils'
@@ -52,7 +52,6 @@ const imagesPath: string[] = await filterImagesPath(filesPath)
 const sharpOptions: CompressTypeOptions = getOptions()
 let isCover: boolean
 let cache: Cache
-
 if (options.cover) {
   const { cover } = await inquirer.prompt({
     type: 'confirm',
