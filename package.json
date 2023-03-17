@@ -15,7 +15,7 @@
   },
   "keywords": [],
   "bin": {
-    "tiny": "dist/index.js"
+    "tiny-image-cli": "dist/index.js"
   },
   "scripts": {
     "dev": "esno src/index.ts",
