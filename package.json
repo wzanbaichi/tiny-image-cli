@@ -1,7 +1,7 @@
 {
   "name": "tiny-image-cli",
   "type": "module",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A CLI tool for compress image files",
   "author": "AI-Finance-FE",
   "license": "ISC",
