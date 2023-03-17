@@ -37,3 +37,6 @@ images
 tiny-image-compress
 imagemin.map.json
 tiny-image.config.json
+*.jpg
+*.png
+*.jpeg
