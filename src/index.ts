@@ -8,7 +8,7 @@ import Cache from './cache'
 import sharpCompress from './sharp'
 import { getOptions } from './options'
 import Count from './count'
-import { startLog, compressDoneLog, errorLog } from './log'
+import { startLog, compressDoneLog } from './log'
 
 // utils
 import { filterFiles, fileReadAndWritePath, asyncForEach, filterImagesPath } from './utils'

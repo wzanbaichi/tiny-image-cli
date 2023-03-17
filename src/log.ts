@@ -17,7 +17,7 @@ export const compressSuccessLog = (pathData, oldSize, newSize) => {
 
 export const startLog = (fileTotal: number, path: string) => {
   console.log(
-    `${chalk.greenBright(`${logTitle} ${chalk.blackBright('Ability Comes From Sharp')}`)}\n`
+    `${chalk.greenBright(`${logTitle} ${chalk.blackBright('Compression Ability Comes From Sharp')}`)}\n`
   )
   console.log(
     `${chalk.greenBright('The root path for the images:')} ${chalk.bgWhiteBright.black(path)}`
