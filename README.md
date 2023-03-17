@@ -11,6 +11,7 @@
 ## 📖Description
 >
 > A CLI tool for compress image files
+> Compression Ability Comes From [Sharp](https://sharp.pixelplumbing.com)
 
 ## 🚀Usage
 
@@ -88,6 +89,8 @@ tiny-image-cli -p /path/to/images/folder -r --cover
 ## ⚙️ Configuration
 
 You can configure the image compression parameters in tiny-image.config.json file. Here's an example of the configuration options:
+
+From [sharp](https://sharp.pixelplumbing.com/api-output)
 
 Jsut Modify the fields you want to change
 
