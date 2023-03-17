@@ -35,3 +35,5 @@ docs-cn/docs
 test_images
 images
 tiny-image-compress
+imagemin.map.json
+tiny-image.config.json
