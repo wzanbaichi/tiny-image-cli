@@ -29,6 +29,7 @@
   "dependencies": {
     "chalk": "^5.2.0",
     "commander": "^10.0.0",
+    "inquirer": "^9.1.4",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
@@ -36,7 +37,6 @@
     "eslint": "^8.36.0",
     "eslint-config-relaxed-ts": "^2.0.20",
     "esno": "^0.16.3",
-    "inquirer": "^9.1.4",
     "prettier": "^2.8.4",
     "ts-node": "^10.9.1",
     "tsup": "^6.6.3",
