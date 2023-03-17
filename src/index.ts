@@ -7,8 +7,11 @@ import { VERSION } from './constant'
 import Cache from './cache'
 import sharpCompress from './sharp'
 import { getOptions } from './options'
+import Count from './count'
+import { startLog, compressDoneLog } from './log'
+
 // utils
-import { filterFiles, fileReadAndWritePath, asyncForEach } from './utils'
+import { filterFiles, fileReadAndWritePath, asyncForEach, filterImagesPath } from './utils'
 
 // interface
 import { CompressTypeOptions, FileReadAndWritePath } from './types/index'
@@ -40,8 +43,15 @@ program
 
 program.parse(process.argv)
 const options = program.opts()
-console.log(options)
+const { recursive } = options
+const imageFileDir: string = path.join(root, typeof options.path === 'string' ? options.path : '')
+const fromPath = options.path || '.'
+const count = new Count()
+const filesPath: string[] = filterFiles(imageFileDir, recursive)
+const imagesPath: string[] = await filterImagesPath(filesPath)
+const sharpOptions: CompressTypeOptions = getOptions()
 let isCover: boolean
+let cache: Cache
 
 if (options.cover) {
   const { cover } = await inquirer.prompt({
@@ -52,19 +62,16 @@ if (options.cover) {
   isCover = cover
 }
 
-const { recursive } = options
-const imageFileDir: string = path.join(root, typeof options.path === 'string' ? options.path : '')
-const fromPath = options.path || '.'
-let cache: Cache
-
 if (options.cache) {
   const cachesFilePath = typeof options.cache === 'string' ? options.cache : ''
   cache = new Cache({ cacheFilePath: cachesFilePath })
 }
 
-const imagesPath: string[] = filterFiles(imageFileDir, recursive)
-const sharpOptions: CompressTypeOptions = getOptions()
-asyncForEach(imagesPath, async (imagePath: string) => {
+/**
+ * start compress
+ */
+startLog(imagesPath.length, imageFileDir)
+await asyncForEach(imagesPath, async (imagePath: string) => {
   const imageReadAndWriteOptions = {
     filePath: imagePath,
     fromPath: fromPath
@@ -77,6 +84,9 @@ asyncForEach(imagesPath, async (imagePath: string) => {
       result && cache.writeCache(pathData)
     }
   } else {
-    sharpCompress(pathData, sharpOptions, isCover)
+    await sharpCompress(pathData, sharpOptions, isCover)
   }
+  count.addOne()
 })
+
+compressDoneLog(count.count)

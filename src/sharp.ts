@@ -2,8 +2,7 @@ import sharp from 'sharp'
 import * as fs from 'fs'
 import path from 'path'
 
-// utils
-import { bytesTransform } from './utils'
+import { compressSuccessLog } from './log'
 
 // maps
 import { imageTypeMap } from './maps'
@@ -11,8 +10,6 @@ import { imageTypeMap } from './maps'
 // interface
 import { CompressTypeOptions } from './types/index'
 import { FileReadAndWritePath } from './types/index'
-
-// const root: string = process.cwd()
 
 export default async (
   pathData: FileReadAndWritePath,
@@ -42,11 +39,7 @@ export default async (
                 fs.renameSync(pathData.toPath, pathData.fromPath)
                 fs.rmdirSync(outputPath)
               }
-              console.log(
-                `${pathData.fromPath}:oldSize:${bytesTransform(
-                  oldSize
-                )} ==>> newSize:${bytesTransform(info.size)}`
-              )
+              compressSuccessLog(pathData, oldSize, info.size)
               resolve(true)
             }
           })
