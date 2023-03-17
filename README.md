@@ -10,7 +10,7 @@
 
 ## 📖Description
 >
-> A Cli tool for compress image files
+> A CLI tool for compress image files
 
 ## 🚀Usage
 
