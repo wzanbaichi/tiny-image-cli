@@ -5,7 +5,7 @@ import sharp from 'sharp'
 import { outputDir } from './constant'
 
 // interface
-import { FileReadAndWritePathOptions, FileReadAndWritePath } from './types/index'
+import type { FileReadAndWritePathOptions, FileReadAndWritePath } from './types/index'
 
 // map
 import { imageTypeMap } from './maps'
@@ -36,24 +36,38 @@ export const filterFiles = (
   return fileList
 }
 
+export const asyncForEach = async (array: any[], callback) => {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
+  }
+}
+
+export const filterAsync = async (array, filterFunc) => {
+  const result = await Promise.all(
+    array.map(async (item) => {
+      return (await filterFunc(item)) ? item : undefined
+    })
+  )
+  return result.filter((item) => item !== undefined)
+}
+
 /**
  *
  * @param filesPath
  * @returns
  * @description 在文件列表中筛选出支持压缩的图片列表
  */
-export const filterImagesPath = async (filesPath: string[]) => {
-  return await filterAsync(filesPath, async (p) => {
+export const filterImagesPath = (filesPath: string[]) =>
+  filterAsync(filesPath, async (p) => {
     try {
       const image = sharp(p)
       const metadata = await image.metadata()
       const { format } = metadata
       return imageTypeMap.has(format)
-    } catch {
+    } catch (error) {
       return false
     }
   })
-}
 /**
  *
  * @param bytes
@@ -88,19 +102,4 @@ export const fileReadAndWritePath = ({
     fromPath: filePath,
     toPath: path.normalize(toPath)
   }
-}
-
-export const asyncForEach = async (array: any[], callback: Function) => {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array)
-  }
-}
-
-export const filterAsync = async (array, filterFunc) => {
-  const result = await Promise.all(
-    array.map(async (item) => {
-      return (await filterFunc(item)) ? item : undefined
-    })
-  )
-  return result.filter((item) => item !== undefined)
 }

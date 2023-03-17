@@ -8,8 +8,7 @@ import { compressSuccessLog, errorLog } from './log'
 import { imageTypeMap } from './maps'
 
 // interface
-import { CompressTypeOptions } from './types/index'
-import { FileReadAndWritePath } from './types/index'
+import type { CompressTypeOptions, FileReadAndWritePath } from './types/index'
 
 export default async (
   pathData: FileReadAndWritePath,

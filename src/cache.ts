@@ -4,7 +4,7 @@ import path from 'path'
 import { cachesFileName } from './constant'
 
 // interface
-import { FileReadAndWritePath } from './types/index'
+import type { FileReadAndWritePath } from './types/index'
 
 const root = process.cwd()
 
@@ -13,6 +13,7 @@ export default class Cache {
    * 缓存文件输出的路径
    */
   public cacheFilePath: string
+
   /**
    *
    * 缓存数据

@@ -6,11 +6,11 @@ import { bytesTransform } from './utils'
 const logTitle = chalk.cyanBright('[tiny-image-cli]')
 
 export const compressSuccessLog = (pathData, oldSize, newSize) => {
-  oldSize = bytesTransform(oldSize)
-  newSize = bytesTransform(newSize)
+  const oldSizeString = bytesTransform(oldSize)
+  const newSizeString = bytesTransform(newSize)
   console.log(
-    `${chalk.cyanBright(pathData.fromPath)} ${chalk.yellowBright(oldSize)} ➡️  ${chalk.greenBright(
-      newSize
+    `${chalk.cyanBright(pathData.fromPath)} ${chalk.yellowBright(oldSizeString)} ➡️  ${chalk.greenBright(
+      newSizeString
     )}`
   )
 }

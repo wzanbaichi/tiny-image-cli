@@ -4,7 +4,7 @@ import { configFileName } from './constant'
 import { sharpOptions } from './compressOptions'
 
 // interface
-import { CompressTypeOptions } from './types/index'
+import type { CompressTypeOptions } from './types/index'
 
 export const getOptions = (): CompressTypeOptions => {
   const root: string = process.cwd()
@@ -19,7 +19,6 @@ export const getOptions = (): CompressTypeOptions => {
       }
     })
     return customOptions
-  } else {
-    return sharpOptions
   }
+  return sharpOptions
 }

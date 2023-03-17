@@ -2,3 +2,5 @@ node_modules/
 dist/
 .vscode/
 .history/
+imagemin.map.json
+tiny-image.config.json
