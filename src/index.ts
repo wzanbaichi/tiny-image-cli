@@ -8,7 +8,7 @@ import Cache from './cache'
 import sharpCompress from './sharp'
 import { getOptions } from './options'
 import Count from './count'
-import { startLog, compressDoneLog } from './log'
+import { startLog, compressDoneLog, noImagesLog } from './log'
 
 // utils
 import { filterFiles, fileReadAndWritePath, asyncForEach, filterImagesPath } from './utils'
@@ -69,7 +69,7 @@ if (options.cache) {
 /**
  * start compress
  */
-startLog(imagesPath.length, imageFileDir)
+imagesPath.length && startLog(imagesPath.length, imageFileDir)
 await asyncForEach(imagesPath, async (imagePath: string) => {
   const imageReadAndWriteOptions = {
     filePath: imagePath,
@@ -88,4 +88,5 @@ await asyncForEach(imagesPath, async (imagePath: string) => {
   count.addOne()
 })
 
-compressDoneLog(count.count)
+imagesPath.length && compressDoneLog(count.count)
+!imagesPath.length && noImagesLog()

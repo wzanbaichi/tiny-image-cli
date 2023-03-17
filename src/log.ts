@@ -17,12 +17,14 @@ export const compressSuccessLog = (pathData, oldSize, newSize) => {
 
 export const startLog = (fileTotal: number, path: string) => {
   console.log(
-    `${chalk.greenBright(`${logTitle} ${chalk.blackBright('Compression Ability Comes From Sharp')}`)}\n`
+    `${chalk.greenBright(
+      `${logTitle} ${chalk.blackBright('Compression Ability Comes From Sharp')}`
+    )}\n`
   )
   console.log(
     `${chalk.greenBright('The root path for the images:')} ${chalk.bgWhiteBright.black(path)}`
   )
-  console.log(
+  fileTotal && console.log(
     `${chalk.greenBright(
       `Found ${chalk.greenBright(fileTotal || 0)} images that can be compressed`
     )}\n`
@@ -40,4 +42,8 @@ export const compressDoneLog = (count) => {
 
 export const errorLog = (err) => {
   console.log(`${logTitle} ${chalk.red(err)}`)
+}
+
+export const noImagesLog = () => {
+  console.log(`${chalk.magentaBright(`${logTitle} No image file was found. Please check if your path is correct.`)}`)
 }
