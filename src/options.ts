@@ -9,7 +9,6 @@ import { CompressTypeOptions } from './types/index'
 export const getOptions = (): CompressTypeOptions => {
   const root: string = process.cwd()
   const optionsFilePath: string = path.join(root, configFileName)
-  console.log(optionsFilePath)
   if (fs.existsSync(optionsFilePath)) {
     const optionsFile: string = fs.readFileSync(optionsFilePath, 'utf-8') || '{}'
     const customOptions = JSON.parse(optionsFile)

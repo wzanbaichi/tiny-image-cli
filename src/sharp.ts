@@ -16,37 +16,47 @@ import { FileReadAndWritePath } from './types/index'
 
 export default async (
   pathData: FileReadAndWritePath,
-  options: CompressTypeOptions
-): Promise<void> => {
-  // const imageDirPath = path.dirname(imagePath)
-  // console.log(imageDirPath)
-  // console.log(path.relative(root, imageDirPath))
-  // const imageFileName: string = path.basename(imagePath)
+  options: CompressTypeOptions,
+  isCover: boolean
+): Promise<boolean> => {
   const outputPath: string = path.dirname(pathData.toPath)
   const image = sharp(pathData.fromPath)
   const oldSize: number = fs.statSync(pathData.fromPath).size
-
   try {
     const metadata = await image.metadata()
     const { format } = metadata
     const compressType: string = imageTypeMap.get(format) || ''
     if (compressType) {
-      console.log(outputPath)
       if (!fs.existsSync(outputPath)) {
         fs.mkdirSync(outputPath, { recursive: true })
       }
-      image[compressType](options[compressType]).toFile(pathData.toPath, (err, info) => {
-        if (err) {
-          console.log(err)
-        } else {
-          console.log(
-            `${pathData.fromPath}:oldSize:${bytesTransform(oldSize)} ==>> newSize:${bytesTransform(
-              info.size
-            )}`
-          )
-        }
+      await new Promise<boolean>((resolve, reject) => {
+        image[compressType](options[compressType])
+          .withMetadata()
+          .toFile(pathData.toPath, (err, info) => {
+            if (err) {
+              console.log(err)
+              reject(err)
+            } else {
+              if (isCover) {
+                fs.renameSync(pathData.toPath, pathData.fromPath)
+                fs.rmdirSync(outputPath)
+              }
+              console.log(
+                `${pathData.fromPath}:oldSize:${bytesTransform(
+                  oldSize
+                )} ==>> newSize:${bytesTransform(info.size)}`
+              )
+              resolve(true)
+            }
+          })
       })
+      return true
     }
-  } catch {}
-  // fs.renameSync('path/to/compressed-image.jpg', 'path/to/image.jpg')
+    return false
+  } catch {
+    return false
+  }
 }
+
+// fs.renameSync('path/to/compressed-image.jpg', 'path/to/image.jpg')

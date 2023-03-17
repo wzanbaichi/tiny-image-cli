@@ -56,44 +56,20 @@ export const fileReadAndWritePath = ({
   fromPath,
   to = 'origin'
 }: FileReadAndWritePathOptions): FileReadAndWritePath => {
-  const fileName = path.basename(filePath)
+  fromPath = path.join(root, fromPath)
+  const fileName:string = path.basename(filePath)
+  const outputPath:string = path.join(root,outputDir)
 
   const toPath =
-    to === 'current' ? path.join(root, outputDir, fileName) : filePath.replace(fromPath, outputDir)
+    to === 'current' ? path.join(root, outputDir, fileName) : filePath.replace(fromPath, outputPath)
   return {
     fromPath: filePath,
-    toPath
+    toPath: path.normalize(toPath)
   }
 }
 
-export const generateDir = () => {
-  const getDirectories = (path) => {
-    return fs
-      .readdirSync(path)
-      .filter((file) => {
-        return fs.statSync(path + '/' + file).isDirectory()
-      })
-      .map((directory) => {
-        return path + '/' + directory
-      })
-      .map((directory) => {
-        return {
-          path: directory,
-          children: getDirectories(directory)
-        }
-      })
+export const asyncForEach = async (array: any[], callback: Function) => {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array)
   }
-
-  const createDirectories = (directories, basePath = '') => {
-    directories.forEach((directory) => {
-      const directoryPath = basePath + '/' + path.basename(directory.path)
-      if (!fs.existsSync(directoryPath)) {
-        fs.mkdirSync(directoryPath)
-      }
-      createDirectories(directory.children, directoryPath)
-    })
-  }
-
-  const directories = getDirectories('/path/to/folder')
-  createDirectories(directories, '/path/to/new/folder')
 }
