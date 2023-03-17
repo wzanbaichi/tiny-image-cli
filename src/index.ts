@@ -29,17 +29,17 @@ program.argument('[string]', 'The path of the image that needs to be compressed.
 
 // 是否将本次压缩的图片添加至缓存文件里
 program
+  .option('-p, --path <path>', 'set images path')
+  .option('-r, --recursive', 'compress all images recursively')
   .option(
     '--cache [cacheFilePath]',
-    'Generate cache files and avoid compressing images saved in them during the next compression'
+    'generate cache files and avoid compressing images saved in them during the next compression'
   )
   // 设置缓存文件的路径
   // .option('--caches-path <path>', 'Set caches file path')
-  .option('-p --path <path>', 'Set images path')
   // 压缩后时候直接覆盖源文件
-  .option('--cover', 'Overwrite the source file')
-  // 递归压缩所有图片文件
-  .option('-r --recursive', 'Compress all images recursively')
+  .option('--cover', 'overwrite the source file')
+// 递归压缩所有图片文件
 
 program.parse(process.argv)
 const options = program.opts()
