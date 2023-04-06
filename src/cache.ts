@@ -38,15 +38,15 @@ export default class Cache {
   }
 
   async writeCache(pathData: FileReadAndWritePath): Promise<void> {
-    const sourceFileStat = fs.statSync(pathData.toPath)
+    const sourceFileStat = fs.statSync(pathData.fromPath)
     const compressionFileStat = fs.statSync(pathData.toPath)
     this.caches[pathData.fromPath] = {
       from: {
-        lastModifyTimeStamp: sourceFileStat.ctimeMs
+        lastModifyTimeStamp: sourceFileStat.mtimeMs
       },
       to: {
         path: pathData.toPath,
-        lastModifyTimeStamp: compressionFileStat.ctimeMs
+        lastModifyTimeStamp: compressionFileStat.mtimeMs
       }
     }
     fs.writeFileSync(this.cacheFilePath, JSON.stringify(this.caches))
@@ -60,11 +60,11 @@ export default class Cache {
   compareCache(pathData: FileReadAndWritePath): boolean {
     try {
       const sourceFileStat = fs.statSync(pathData.fromPath)
-      // const compressionFileStat = fs.statSync(pathData.toPath)
-      const cacheStat = this.caches[pathData.fromPath].from
+      const cacheStat = this.caches[pathData.fromPath]?.from
       return (
-        sourceFileStat.ctimeMs === cacheStat.lastModifyTimeStamp && fs.existsSync(pathData.toPath)
+        sourceFileStat.mtimeMs === cacheStat?.lastModifyTimeStamp && fs.existsSync(pathData.toPath)
       )
+      // const compressionFileStat = fs.statSync(pathData.toPath)
       // const cacheTimeStamp = this.caches[imagePath].lastModifyTimeStamp
       // const toPath = this.caches[imagePath].to
       // const toFileStat = fs.statSync(toPath)

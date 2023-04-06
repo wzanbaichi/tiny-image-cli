@@ -46,7 +46,8 @@ const options = program.opts()
 const { recursive } = options
 const imageFileDir: string = path.join(root, typeof options.path === 'string' ? options.path : '')
 const fromPath = options.path || '.'
-const count = new Count()
+const succeededCount = new Count()
+const cachedCount = new Count()
 const filesPath: string[] = filterFiles(imageFileDir, recursive)
 const imagesPath: string[] = await filterImagesPath(filesPath)
 const sharpOptions: CompressTypeOptions = getOptions()
@@ -77,16 +78,19 @@ await asyncForEach(imagesPath, async (imagePath: string) => {
   }
   const pathData: FileReadAndWritePath = fileReadAndWritePath(imageReadAndWriteOptions)
   if (cache) {
-    const compareCacheResult: boolean = cache.compareCache(pathData)
+    const compareCacheResult: boolean = await cache.compareCache(pathData)
     if (!compareCacheResult) {
       const result: boolean = await sharpCompress(pathData, sharpOptions, isCover)
       result && cache.writeCache(pathData)
+      succeededCount.addOne()
+    } else {
+      cachedCount.addOne()
     }
   } else {
     await sharpCompress(pathData, sharpOptions, isCover)
+    succeededCount.addOne()
   }
-  count.addOne()
 })
 
-imagesPath.length && compressDoneLog(count.count)
+imagesPath.length && compressDoneLog(succeededCount.count, cachedCount.count)
 !imagesPath.length && noImagesLog()
